@@ -75,6 +75,10 @@ namespace Platformer
 				OnFallStatusChange?.Invoke(value);
 			}
 		}
+		/// <summary>
+		/// Check does GameObject grounded based on Collider2D check
+		/// </summary>
+		public bool IsGrounded { get; private set; }
 
 		// INITIAL VARIABLES
 
@@ -121,31 +125,19 @@ namespace Platformer
 		/// </summary>
 		protected MovementDirection _direction = MovementDirection.None;
 		/// <summary>
-		/// Does gameobject is running
-		/// </summary>
-		protected bool _isRunning = false;
-		/// <summary>
-		/// Does gameobject is falling
+		/// Internal field for tracking run state.
 		/// </summary>
 		/// <remarks>
-		/// DO NOT USE IT. USE <see cref="IsFalling"/> INSTEAD
+		/// Use <see cref="IsRunning"/> instead to ensure event invocation.
+		/// </remarks>
+		protected bool _isRunning = false;
+		/// <summary>
+		/// Internal field for tracking falling state.
+		/// </summary>
+		/// <remarks>
+		/// Use <see cref="IsFalling"/> instead to ensure event invocation.
 		/// </remarks>
 		private bool _isFalling = false;
-
-		/// <summary>
-		/// Check does GameObject grounded based on Collider2D check
-		/// </summary>
-		protected bool IsGrounded =>
-				Physics2D.OverlapBox( // Create box under gameobject to check ground
-					new(transform.position.x + collider.offset.x,
-						transform.position.y + collider.offset.y
-						- collider.size.y / 2/*Make it at bottom of gameobject*/ 
-						- groundCheckHeight / 2
-						- groundCheckOffset),
-					new(collider.size.x, groundCheckHeight), 
-					0,
-					GroundLayer
-				);
 
 		// UNITY
 
@@ -158,6 +150,17 @@ namespace Platformer
 
 		private void Update()
 		{
+			IsGrounded = Physics2D.OverlapBox( // Create box under gameobject to check ground
+						new(transform.position.x + collider.offset.x,
+							transform.position.y + collider.offset.y
+							- collider.size.y / 2/*Make it at bottom of gameobject*/
+							- groundCheckHeight / 2
+							- groundCheckOffset),
+						new(collider.size.x, groundCheckHeight),
+						0,
+						GroundLayer
+					);
+			
 			var NewFallStatus = false;
 			if (IsGrounded) // If grounded, update LastGroundTime
 				LastGroundTime = Time.time;
