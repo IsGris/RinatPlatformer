@@ -1,24 +1,17 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 namespace Platformer
 {
-    [RequireComponent(typeof(MovementModel), typeof(MovementView))]
     public class MovementPresenter : MonoBehaviour
     {
-        // INTERNAL VARIABLES
-        
-        protected MovementModel model;
-        protected MovementView view;
+		// INTERNAL VARIABLES
+
+		[Inject] protected MovementModel model;
+		[Inject] protected MovementView view;
 
 		// UNITY
-
-		private void Awake()
-		{
-            model = GetComponent<MovementModel>();
-            view = GetComponent<MovementView>();
-			SubscribeToEvents();
-		}
 
 		private void OnEnable() =>
 			SubscribeToEvents();

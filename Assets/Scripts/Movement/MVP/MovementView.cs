@@ -1,23 +1,15 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 namespace Platformer
 {
-	[RequireComponent(typeof(Animator), typeof(SpriteRenderer))]
 	public class MovementView : MonoBehaviour
 	{
 		// INTERNAL VARIABLES
 		
-		protected Animator animator;
-		protected SpriteRenderer sprite;
-
-		// UNITY
-
-		private void Awake()
-		{
-			animator = GetComponent<Animator>();
-			sprite = GetComponent<SpriteRenderer>();
-		}
+		[Inject] protected Animator animator;
+		[Inject] protected SpriteRenderer sprite;
 
 		// PUBLIC
 

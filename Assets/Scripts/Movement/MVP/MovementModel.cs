@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace Platformer
 {
@@ -13,7 +14,6 @@ namespace Platformer
 	/// <summary>
 	/// Model for movement in 2D space
 	/// </summary>
-	[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 	public class MovementModel : MonoBehaviour
 	{
 		// EVENTS
@@ -82,27 +82,33 @@ namespace Platformer
 
 		// INITIAL VARIABLES
 
-		[Header("Movement Settings")]
-		[SerializeField] protected float MoveSpeed = 5f;
-		[SerializeField] protected float RunSpeed = 10f;
-		[SerializeField] protected float JumpForce = 10f;
-		[Tooltip("Time amount how long it would take to transition from not moving to full speed")] 
-		[SerializeField] private float DirectionTransitionTime = 0.5f;
-		[Tooltip("Time in seconds after leaving the ground during which a jump is still allowed")]
-		[SerializeField] private float CoyoteTime = 0.2f;
+		[Serializable]
+		public class MovementSettings
+		{
+			[Header("Movement Settings")]
+			[SerializeField] public float MoveSpeed = 5f;
+			[SerializeField] public float RunSpeed = 10f;
+			[SerializeField] public float JumpForce = 10f;
+			[Tooltip("Time amount how long it would take to transition from not moving to full speed")]
+			[SerializeField] public float DirectionTransitionTime = 0.5f;
+			[Tooltip("Time in seconds after leaving the ground during which a jump is still allowed")]
+			[SerializeField] public float CoyoteTime = 0.2f;
 
-		[Header("Ground Check")]
-		[SerializeField] protected LayerMask GroundLayer;
-		[Tooltip("Height of the box that is spawned below GameObject to check whether it is on ground")]
-		[SerializeField] private float groundCheckHeight = 0.1f;
-		[Tooltip("Distance between GameObject and Ground check box to prevent them touch each other")]
-		[SerializeField] private float groundCheckOffset = 0.03f;
+			[Header("Ground Check")]
+			[SerializeField] public LayerMask GroundLayer;
+			[Tooltip("Height of the box that is spawned below GameObject to check whether it is on ground")]
+			[SerializeField] public float GroundCheckHeight = 0.1f;
+			[Tooltip("Distance between GameObject and Ground check box to prevent them touch each other")]
+			[SerializeField] public float GroundCheckOffset = 0.03f;
+		}
+
+		[Inject] protected MovementSettings settings;
 
 		// INTERNAL VARIABLES
 
-		protected new Rigidbody2D rigidbody;
-		protected new BoxCollider2D collider;
-		protected new Transform transform;
+		[Inject] protected new Rigidbody2D rigidbody;
+		[Inject] protected new BoxCollider2D collider;
+		[Inject(Id = "MovingObjectTransform")] protected new Transform transform;
 
 		/// <summary>
 		/// Current speed
@@ -141,26 +147,19 @@ namespace Platformer
 
 		// UNITY
 
-		private void Awake()
-		{
-			rigidbody = GetComponent<Rigidbody2D>();
-			collider = GetComponent<BoxCollider2D>();
-			transform = gameObject.transform;
-		}
-
 		private void Update()
 		{
 			IsGrounded = Physics2D.OverlapBox( // Create box under gameobject to check ground
 						new(transform.position.x + collider.offset.x,
 							transform.position.y + collider.offset.y
 							- collider.size.y / 2/*Make it at bottom of gameobject*/
-							- groundCheckHeight / 2
-							- groundCheckOffset),
-						new(collider.size.x, groundCheckHeight),
+							- settings.GroundCheckHeight / 2
+							- settings.GroundCheckOffset),
+						new(collider.size.x, settings.GroundCheckHeight),
 						0,
-						GroundLayer
+						settings.GroundLayer
 					);
-			
+
 			var NewFallStatus = false;
 			if (IsGrounded) // If grounded, update LastGroundTime
 				LastGroundTime = Time.time;
@@ -182,10 +181,10 @@ namespace Platformer
 		[ContextMenu("Jump")]
 		public bool Jump()
 		{
-			if (!IsGrounded && !(LastGroundTime + CoyoteTime >= Time.time && LastJumpTime + CoyoteTime <= Time.time)) // Check does can jump
+			if (!IsGrounded && !(LastGroundTime + settings.CoyoteTime >= Time.time && LastJumpTime + settings.CoyoteTime <= Time.time)) // Check does can jump
 				return false;
 
-			rigidbody.linearVelocityY = JumpForce;
+			rigidbody.linearVelocityY = settings.JumpForce;
 			LastJumpTime = Time.time;
 			OnJump?.Invoke();
 			return true;
@@ -207,17 +206,17 @@ namespace Platformer
 			if (IsRunning)
 			{
 				// Set speed to maximum when running for better movement
-				Speed = RunSpeed * (int)Direction;
+				Speed = settings.RunSpeed * (int)Direction;
 			} 
 			else
 			{
-				if (DirectionTransitionTime > 0) // Linear increase speed using DirectionChangeTime
+				if (settings.DirectionTransitionTime > 0) // Linear increase speed using DirectionChangeTime
 					Speed = Mathf.Min(
-								MoveSpeed, 
-								Mathf.Lerp(0, MoveSpeed, (Time.time - DirectionChangeTime) / DirectionTransitionTime)
+								settings.MoveSpeed, 
+								Mathf.Lerp(0, settings.MoveSpeed, (Time.time - DirectionChangeTime) / settings.DirectionTransitionTime)
 							) * (int)Direction;
 				else
-					Speed = MoveSpeed * (int)Direction;
+					Speed = settings.MoveSpeed * (int)Direction;
 			}
 		}
 	}
