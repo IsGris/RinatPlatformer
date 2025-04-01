@@ -55,7 +55,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -69,7 +69,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -134,10 +134,10 @@ TextureImporter:
       name: Hit (32x32)_0
       rect:
         serializedVersion: 2
-        x: 5
+        x: 0
         y: 0
-        width: 22
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,10 +156,10 @@ TextureImporter:
       name: Hit (32x32)_1
       rect:
         serializedVersion: 2
-        x: 37
+        x: 32
         y: 0
-        width: 22
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,10 +178,10 @@ TextureImporter:
       name: Hit (32x32)_2
       rect:
         serializedVersion: 2
-        x: 68
+        x: 64
         y: 0
-        width: 24
-        height: 27
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,10 +200,10 @@ TextureImporter:
       name: Hit (32x32)_3
       rect:
         serializedVersion: 2
-        x: 98
-        y: 2
-        width: 28
-        height: 23
+        x: 96
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,10 +222,10 @@ TextureImporter:
       name: Hit (32x32)_4
       rect:
         serializedVersion: 2
-        x: 129
-        y: 3
-        width: 30
-        height: 21
+        x: 128
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,10 +244,10 @@ TextureImporter:
       name: Hit (32x32)_5
       rect:
         serializedVersion: 2
-        x: 162
-        y: 2
-        width: 28
-        height: 23
+        x: 160
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,10 +266,10 @@ TextureImporter:
       name: Hit (32x32)_6
       rect:
         serializedVersion: 2
-        x: 195
-        y: 1
-        width: 26
-        height: 25
+        x: 192
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -288,7 +288,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 984f204f4a50b184b883890f06b25cd8
     internalID: 0
     vertices: []
     indices: 
@@ -297,7 +297,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Hit (32x32)_0: 6868122594974341346
+      Hit (32x32)_1: 7167584040609486739
+      Hit (32x32)_2: -1675461080110260169
+      Hit (32x32)_3: 8480664182131228983
+      Hit (32x32)_4: -953560442851353963
+      Hit (32x32)_5: -3450976776972242761
+      Hit (32x32)_6: 7062579536633761780
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
