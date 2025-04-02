@@ -20,6 +20,6 @@ MonoBehaviour:
     CoyoteTime: 0.2
     GroundLayer:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 1024
     GroundCheckHeight: 0.1
     GroundCheckOffset: 0.03
