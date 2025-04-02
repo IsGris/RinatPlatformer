@@ -3,13 +3,9 @@ using UnityEngine.InputSystem;
 using Zenject;
 using Platformer;
 
-public class PlayerInputInstaller : MonoInstaller
+[CreateAssetMenu(fileName = "NewPlayerInputInstaller", menuName = "Installers/PlayerInputInstaller")]
+public class PlayerInputInstaller : ScriptableObjectInstaller<PlayerInputInstaller>
 {
-    [Header("Components")]
-    public PlayerController playerController;
-    public PlayerInputHandler playerInputHandler;
-    public PlayerInput playerInput;
-
     [Header("Actions")]
     public string MoveActionName;
     public string JumpActionName;
@@ -17,9 +13,9 @@ public class PlayerInputInstaller : MonoInstaller
 
 	public override void InstallBindings()
     {
-        Container.Bind<PlayerController>().FromInstance(playerController).AsSingle();
-        Container.Bind<PlayerInputHandler>().FromInstance(playerInputHandler).AsSingle();
-        Container.Bind<PlayerInput>().FromInstance(playerInput).AsSingle();
+        Container.Bind<PlayerController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PlayerInputHandler>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PlayerInput>().FromComponentInHierarchy().AsSingle();
 
         Container.Bind<string>().WithId("MoveActionName").FromInstance(MoveActionName).AsCached();
         Container.Bind<string>().WithId("JumpActionName").FromInstance(JumpActionName).AsCached();
