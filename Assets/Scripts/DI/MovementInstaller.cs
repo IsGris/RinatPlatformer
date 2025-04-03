@@ -13,7 +13,7 @@ public class MovementInstaller : ScriptableObjectInstaller<MovementInstaller>
         Container.Bind<MovementView>().FromComponentInHierarchy().AsSingle();
         Container.Bind<MovementPresenter>().FromComponentInHierarchy().AsSingle();
 
-		Container.Bind<Transform>().WithId("MovingObjectTransform").FromComponentInHierarchy().AsSingle();
+		Container.Bind<Transform>().WithId("CharacterTransform").FromComponentInHierarchy().AsSingle();
 		Container.Bind<Animator>().FromComponentInHierarchy().AsSingle();
 		Container.Bind<SpriteRenderer>().FromComponentInHierarchy().AsSingle();
 		Container.Bind<Rigidbody2D>().FromComponentInHierarchy().AsSingle();

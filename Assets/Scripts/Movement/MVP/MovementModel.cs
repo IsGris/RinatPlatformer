@@ -116,7 +116,7 @@ namespace Platformer
 
 		[Inject] protected new Rigidbody2D rigidbody;
 		[Inject] protected new BoxCollider2D collider;
-		[Inject(Id = "MovingObjectTransform")] protected new Transform transform;
+		[Inject(Id = "CharacterTransform")] protected new Transform transform;
 
 		/// <summary>
 		/// Current speed
