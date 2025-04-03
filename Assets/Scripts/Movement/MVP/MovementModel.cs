@@ -98,7 +98,7 @@ namespace Platformer
 			[SerializeField] public LayerMask GroundLayer;
 			[Tooltip("Height of the box that is spawned below GameObject to check whether it is on ground")]
 			[SerializeField] public float GroundCheckHeight = 0.1f;
-			[Tooltip("Distance between GameObject and Ground check box to prevent them touch each other")]
+			[Tooltip("Small distance that is subtracted from collision check to prevent collisions where the object touches the edge of the collider")]
 			[SerializeField] public float GroundCheckOffset = 0.03f;
 		}
 
@@ -155,7 +155,7 @@ namespace Platformer
 							- collider.size.y / 2/*Make it at bottom of gameobject*/
 							- settings.GroundCheckHeight / 2
 							- settings.GroundCheckOffset),
-						new(collider.size.x, settings.GroundCheckHeight),
+						new(collider.size.x - settings.GroundCheckOffset, settings.GroundCheckHeight),
 						0,
 						settings.GroundLayer
 					);
