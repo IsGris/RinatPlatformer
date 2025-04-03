@@ -18,9 +18,9 @@ MonoBehaviour:
     JumpForce: 10
     DirectionTransitionTime: 0.5
     CoyoteTime: 0.2
-    GroundLayer:
+    CollisionLayer:
       serializedVersion: 2
       m_Bits: 1024
-    GroundCheckHeight: 0.1
-    GroundCheckOffset: 0.03
+    CollisionCheckThickness: 0.1
+    CollisionCheckOffset: 0.03
   backAndForthMovementSettings: {fileID: 11400000, guid: 4ce48ffc914559245860d25bde7080ae, type: 2}

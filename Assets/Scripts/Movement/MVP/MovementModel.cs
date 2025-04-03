@@ -79,6 +79,14 @@ namespace Platformer
 		/// Check does GameObject grounded based on Collider2D check
 		/// </summary>
 		public bool IsGrounded { get; private set; }
+		/// <summary>
+		/// Does character touch right wall
+		/// </summary>
+		public bool IsTouchRightWall { get; private set; }
+		/// <summary>
+		/// Does character touch left wall
+		/// </summary>
+		public bool IsTouchLeftWall { get; private set; }
 
 		// INITIAL VARIABLES
 
@@ -94,12 +102,12 @@ namespace Platformer
 			[Tooltip("Time in seconds after leaving the ground during which a jump is still allowed")]
 			[SerializeField] public float CoyoteTime = 0.2f;
 
-			[Header("Ground Check")]
-			[SerializeField] public LayerMask GroundLayer;
-			[Tooltip("Height of the box that is spawned below GameObject to check whether it is on ground")]
-			[SerializeField] public float GroundCheckHeight = 0.1f;
+			[Header("Collision Check")]
+			[SerializeField] public LayerMask CollisionLayer;
+			[Tooltip("Thickness of the box that is spawned to check does character touching some obstacles")]
+			[SerializeField] public float CollisionCheckThickness = 0.1f;
 			[Tooltip("Small distance that is subtracted from collision check to prevent collisions where the object touches the edge of the collider")]
-			[SerializeField] public float GroundCheckOffset = 0.03f;
+			[SerializeField] public float CollisionCheckOffset = 0.03f;
 		}
 
 		[Inject] protected MovementSettings settings;
@@ -153,11 +161,31 @@ namespace Platformer
 						new(transform.position.x + collider.offset.x,
 							transform.position.y + collider.offset.y
 							- collider.size.y / 2/*Make it at bottom of gameobject*/
-							- settings.GroundCheckHeight / 2
-							- settings.GroundCheckOffset),
-						new(collider.size.x - settings.GroundCheckOffset, settings.GroundCheckHeight),
+							- settings.CollisionCheckThickness / 2
+							- settings.CollisionCheckOffset),
+						new(collider.size.x - settings.CollisionCheckOffset, settings.CollisionCheckThickness),
 						0,
-						settings.GroundLayer
+						settings.CollisionLayer
+					);
+			IsTouchRightWall = Physics2D.OverlapBox( // Create box on right of gameobject to check wall
+					new(transform.position.x + collider.offset.x
+						+ collider.size.x / 2/*Make it at right side of gameobject*/
+						+ settings.CollisionCheckThickness / 2
+						+ settings.CollisionCheckOffset,
+						transform.position.y + collider.offset.y),
+					new(settings.CollisionCheckThickness, collider.size.y - settings.CollisionCheckOffset),
+					0,
+					settings.CollisionLayer
+				);
+			IsTouchLeftWall = Physics2D.OverlapBox( // Create box on ledt side of gameobject to check wall
+						new(transform.position.x + collider.offset.x
+							- collider.size.x / 2/*Make it at left side of gameobject*/
+							- settings.CollisionCheckThickness / 2
+							- settings.CollisionCheckOffset,
+							transform.position.y + collider.offset.y),
+						new(settings.CollisionCheckThickness, collider.size.y - settings.CollisionCheckOffset),
+						0,
+						settings.CollisionLayer
 					);
 
 			var NewFallStatus = false;
@@ -218,6 +246,9 @@ namespace Platformer
 				else
 					Speed = settings.MoveSpeed * (int)Direction;
 			}
+
+			if ((IsTouchLeftWall && Direction == MovementDirection.Left) || (IsTouchRightWall && Direction == MovementDirection.Right)) // Can't move in wall
+				Speed = 0f;
 		}
 	}
 }
