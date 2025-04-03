@@ -14,8 +14,6 @@ public class MovementInstaller : ScriptableObjectInstaller<MovementInstaller>
         Container.Bind<MovementPresenter>().FromComponentInHierarchy().AsSingle();
 
 		Container.Bind<Transform>().WithId("CharacterTransform").FromComponentInHierarchy().AsSingle();
-		Container.Bind<Animator>().FromComponentInHierarchy().AsSingle();
-		Container.Bind<SpriteRenderer>().FromComponentInHierarchy().AsSingle();
 		Container.Bind<Rigidbody2D>().FromComponentInHierarchy().AsSingle();
         Container.Bind<BoxCollider2D>().FromComponentInHierarchy().AsSingle();
 
