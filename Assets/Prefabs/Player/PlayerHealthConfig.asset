@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b045d8b83900f8a49b739a2664c264fc, type: 3}
-  m_Name: HealthInstaller
+  m_Script: {fileID: 11500000, guid: a64135ccf16fb294fa5f85c994a2fd58, type: 3}
+  m_Name: PlayerHealthConfig
   m_EditorClassIdentifier: 
-  healthConfig: {fileID: 0}
+  Health: 3
+  MaxHealth: 3
+  ImmortalTime: 1
+  KnockbackPower: 15
