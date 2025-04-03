@@ -20,7 +20,7 @@ MonoBehaviour:
     CoyoteTime: 0.2
     CollisionLayer:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 1024
     CollisionCheckThickness: 0.1
     CollisionCheckOffset: 0.03
   backAndForthMovementSettings: {fileID: 11400000, guid: 4ce48ffc914559245860d25bde7080ae, type: 2}
