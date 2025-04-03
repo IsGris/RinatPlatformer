@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc47dbd66e4772e4e9a156e1a1c3e845, type: 3}
-  m_Name: DefaultBackAndForthMovementStrategy
+  m_Script: {fileID: 11500000, guid: b045d8b83900f8a49b739a2664c264fc, type: 3}
+  m_Name: HealthInstaller
   m_EditorClassIdentifier: 
-  StartDirection: 1
-  WallLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  WallCheckWidth: 0.1
-  WallCheckOffset: 0.03
+  healthConfig: {fileID: 0}
