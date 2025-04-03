@@ -97,8 +97,8 @@ namespace Platformer
 			[SerializeField] public float MoveSpeed = 5f;
 			[SerializeField] public float RunSpeed = 10f;
 			[SerializeField] public float JumpForce = 10f;
-			[Tooltip("Time amount how long it would take to transition from not moving to full speed")]
-			[SerializeField] public float DirectionTransitionTime = 0.5f;
+			[Tooltip("How fast character will approach desired speed")]
+			[SerializeField] public float Acceleration = 15f;
 			[Tooltip("Time in seconds after leaving the ground during which a jump is still allowed")]
 			[SerializeField] public float CoyoteTime = 0.2f;
 
@@ -157,6 +157,72 @@ namespace Platformer
 
 		private void Update()
 		{
+			UpdateGroundStatus();
+			UpdateCollisionChecks();
+			UpdateSpeed();
+		}
+
+		private void FixedUpdate() =>
+			ApplySpeed(Time.fixedDeltaTime);
+
+		// PUBLIC
+
+		/// <summary>
+		/// Try to jump
+		/// </summary>
+		/// <returns>does jump was successful</returns>
+		[ContextMenu("Jump")]
+		public bool Jump()
+		{
+			if (!IsGrounded && !(LastGroundTime + settings.CoyoteTime >= Time.time && LastJumpTime + settings.CoyoteTime <= Time.time)) // Check does can jump
+				return false;
+
+			rigidbody.linearVelocityY = settings.JumpForce;
+			LastJumpTime = Time.time;
+			OnJump?.Invoke();
+			return true;
+		}
+
+		/// <summary>
+		/// Applies a force to the character in a given direction with a specified power
+		/// </summary>
+		/// <param name="direction">The normalized direction vector to apply the force</param>
+		/// <param name="power">The magnitude of the force to apply</param>
+		public void ApplyForce(Vector2 direction, float power) =>
+			rigidbody.AddForce(direction.normalized * power, ForceMode2D.Impulse);
+
+		// PRIVATE
+
+		/// <summary>
+		/// Applies <see cref="Speed"/> variable on character's Rigidbody gradually.
+		/// </summary>
+		/// <param name="Value">Modifier that scales the acceleration effect</param>
+		private void ApplySpeed(float Value)
+		{
+			if (!IsGrounded && Speed == 0f) // If in air and doesnt moving then dont apply speed
+				return;
+			// Smoothly apply velocity towards desired speed
+			rigidbody.linearVelocityX = Mathf.MoveTowards(rigidbody.linearVelocityX, Speed, settings.Acceleration * Value);
+		}
+
+		/// <summary>
+		/// Update status for <see cref="IsGrounded"/> and <see cref="IsFalling"/>
+		/// </summary>
+		private void UpdateGroundStatus()
+		{
+			var NewFallStatus = false;
+			if (IsGrounded) // If grounded, update LastGroundTime
+				LastGroundTime = Time.time;
+			else if (rigidbody.linearVelocityY < 0) // If not grounded and velocity is falling, set new fall status to true
+				NewFallStatus = true;
+			IsFalling = NewFallStatus;
+		}
+
+		/// <summary>
+		/// Update variables for collision check between character and obstacles
+		/// </summary>
+		private void UpdateCollisionChecks()
+		{
 			IsGrounded = Physics2D.OverlapBox( // Create box under gameobject to check ground
 						new(transform.position.x + collider.offset.x,
 							transform.position.y + collider.offset.y
@@ -187,41 +253,10 @@ namespace Platformer
 						0,
 						settings.CollisionLayer
 					);
-
-			var NewFallStatus = false;
-			if (IsGrounded) // If grounded, update LastGroundTime
-				LastGroundTime = Time.time;
-			else if (rigidbody.linearVelocityY < 0) // If not grounded and velocity is falling, set new fall status to true
-				NewFallStatus = true;
-			IsFalling = NewFallStatus;
-			
-			UpdateSpeed();
-
-			rigidbody.linearVelocityX = Speed;
 		}
 
-		// PUBLIC
-
 		/// <summary>
-		/// Try to jump
-		/// </summary>
-		/// <returns>does jump was successful</returns>
-		[ContextMenu("Jump")]
-		public bool Jump()
-		{
-			if (!IsGrounded && !(LastGroundTime + settings.CoyoteTime >= Time.time && LastJumpTime + settings.CoyoteTime <= Time.time)) // Check does can jump
-				return false;
-
-			rigidbody.linearVelocityY = settings.JumpForce;
-			LastJumpTime = Time.time;
-			OnJump?.Invoke();
-			return true;
-		}
-
-		// PRIVATE
-
-		/// <summary>
-		/// Update current speed based on <see cref="Direction"/>, <see cref="IsRunning"/>, <see cref="DirectionChangeTime"/> and <see cref="DirectionTransitionTime"/>
+		/// Update current <see cref="Speed"/>
 		/// </summary>
 		private void UpdateSpeed()
 		{
@@ -231,21 +266,7 @@ namespace Platformer
 				return;
 			}
 
-			if (IsRunning)
-			{
-				// Set speed to maximum when running for better movement
-				Speed = settings.RunSpeed * (int)Direction;
-			} 
-			else
-			{
-				if (settings.DirectionTransitionTime > 0) // Linear increase speed using DirectionChangeTime
-					Speed = Mathf.Min(
-								settings.MoveSpeed, 
-								Mathf.Lerp(0, settings.MoveSpeed, (Time.time - DirectionChangeTime) / settings.DirectionTransitionTime)
-							) * (int)Direction;
-				else
-					Speed = settings.MoveSpeed * (int)Direction;
-			}
+			Speed = (IsRunning ? settings.RunSpeed : settings.MoveSpeed) * (int)Direction;
 
 			if ((IsTouchLeftWall && Direction == MovementDirection.Left) || (IsTouchRightWall && Direction == MovementDirection.Right)) // Can't move in wall
 				Speed = 0f;

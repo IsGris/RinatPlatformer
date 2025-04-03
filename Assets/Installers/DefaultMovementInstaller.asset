@@ -16,7 +16,7 @@ MonoBehaviour:
     MoveSpeed: 5
     RunSpeed: 10
     JumpForce: 10
-    DirectionTransitionTime: 0.5
+    Acceleration: 10
     CoyoteTime: 0.2
     CollisionLayer:
       serializedVersion: 2

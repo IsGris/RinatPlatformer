@@ -16,11 +16,11 @@ MonoBehaviour:
     MoveSpeed: 5
     RunSpeed: 10
     JumpForce: 10
-    DirectionTransitionTime: 0.5
+    Acceleration: 1000
     CoyoteTime: 0.2
     CollisionLayer:
       serializedVersion: 2
-      m_Bits: 1024
+      m_Bits: 0
     CollisionCheckThickness: 0.1
     CollisionCheckOffset: 0.03
   backAndForthMovementSettings: {fileID: 11400000, guid: 4ce48ffc914559245860d25bde7080ae, type: 2}
