@@ -46,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -60,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 24
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -125,10 +125,10 @@ TextureImporter:
       name: Break_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 8
-        width: 11
-        height: 10
+        x: 0
+        y: 0
+        width: 28
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,10 +147,10 @@ TextureImporter:
       name: Break_1
       rect:
         serializedVersion: 2
-        x: 36
-        y: 8
-        width: 13
-        height: 10
+        x: 28
+        y: 0
+        width: 28
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,10 +169,10 @@ TextureImporter:
       name: Break_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 7
-        width: 14
-        height: 11
+        x: 56
+        y: 0
+        width: 28
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -191,10 +191,10 @@ TextureImporter:
       name: Break_3
       rect:
         serializedVersion: 2
-        x: 93
-        y: 7
-        width: 10
-        height: 11
+        x: 84
+        y: 0
+        width: 28
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -213,7 +213,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f67a2fbd02d7f4545a7884672771034b
     internalID: 0
     vertices: []
     indices: 
@@ -222,7 +222,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Break_0: -6426412849335849376
+      Break_1: 5504277486448943824
+      Break_2: 3847257389965480688
+      Break_3: 1273466696024107936
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
