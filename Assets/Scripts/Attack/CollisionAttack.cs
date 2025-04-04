@@ -44,14 +44,16 @@ namespace Platformer
 
 			if (collision.collider.bounds.min.y + collisionAttackSettings.CollisionOffset/*Apply offset to prevent small deviations*/ 
                 > boxCollider.bounds.max.y) // check target bottom point higher than attacker top point
+            {
                 if (collisionAttackSettings.AttackTopCollision) // check does attack allowed 
 					ApplyAttack(targetHealth);
-
+            }
             else if (collision.collider.bounds.max.y - collisionAttackSettings.CollisionOffset/*Apply offset to prevent small deviations*/ 
                 < boxCollider.bounds.min.y) // check does target top point below attacker lowest point
+            {
                 if (collisionAttackSettings.AttackBottomCollision)  // check does attack allowed
 					ApplyAttack(targetHealth);
-
+            }
 			else if (collisionAttackSettings.AttackSideCollision) // if target not in upper and not in below position then it's on side
 				ApplyAttack(targetHealth);
 		}
