@@ -38,23 +38,23 @@ TagManager:
   - 
   - Background
   m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
   - name: Background
     uniqueID: 1656893547
     locked: 0
   - name: Solid
     uniqueID: 4207218071
     locked: 0
-  - name: Character
-    uniqueID: 4026122079
+  - name: Collectable
+    uniqueID: 419642891
     locked: 0
   - name: Enemy
     uniqueID: 1155917903
     locked: 0
-  - name: Interactable
-    uniqueID: 419642891
-    locked: 0
-  - name: Default
-    uniqueID: 0
+  - name: Character
+    uniqueID: 4026122079
     locked: 0
   m_RenderingLayers:
   - Default
