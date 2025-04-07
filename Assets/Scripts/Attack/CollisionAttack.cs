@@ -38,7 +38,7 @@ namespace Platformer
 			var targetContext = collision.gameObject.GetComponent<GameObjectContext>();
             if (!targetContext) 
                 return;
-            HealthModel targetHealth = targetContext.Container.Resolve<HealthModel>();
+            HealthModel targetHealth = targetContext.Container.TryResolve<HealthModel>();
             if (!targetHealth)
                 return;
 

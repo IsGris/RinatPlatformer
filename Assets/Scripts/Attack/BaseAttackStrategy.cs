@@ -17,7 +17,7 @@ namespace Platformer
         // INTERNAL VARIABLES
 
         [Inject] protected AttackSettings settings;
-        [Inject] protected MovementModel movementModel;
+        [Inject(Optional = true)] protected MovementModel movementModel;
 
 		// UNITY
 
@@ -37,7 +37,10 @@ namespace Platformer
 
 		// PRIVATE
 		
-		private void ApplyKnockbackOnAttack(GameObject target) =>
-			movementModel.ApplyForce(settings.KnockbackDirection, settings.KnockbackPower);
+		private void ApplyKnockbackOnAttack(GameObject target)
+		{
+			if (settings.ApplyKnockbackOnAttack)
+				movementModel.ApplyForce(settings.KnockbackDirection, settings.KnockbackPower);
+		}
 	}
 }
