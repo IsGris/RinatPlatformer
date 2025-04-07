@@ -15,6 +15,7 @@ namespace Platformer
         public event Action<int> OnHealthUpdateRequired;
 		public event Action OnHitAnimationRequired;
         public event Action OnDeathAnimationRequired;
+        public event Action OnOnlyVisaulRequired;
 
 		// INTERNAL VARIABLES
 
@@ -56,8 +57,12 @@ namespace Platformer
         protected virtual void HandleHealthChange(int NewValue) =>
 			OnHealthUpdateRequired?.Invoke(NewValue);
 
-		protected virtual void HandleDeath() =>
+		protected virtual void HandleDeath()
+        {
             OnDeathAnimationRequired?.Invoke();
+            // Enable only visual components just for death animation
+            OnOnlyVisaulRequired?.Invoke();
+        }
 	
     }
 }
