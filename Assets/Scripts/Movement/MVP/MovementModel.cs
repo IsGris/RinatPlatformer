@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -104,10 +105,8 @@ namespace Platformer
 
 			[Header("Collision Check")]
 			[SerializeField] public LayerMask CollisionLayer;
-			[Tooltip("Thickness of the box that is spawned to check does character touching some obstacles")]
-			[SerializeField] public float CollisionCheckThickness = 0.1f;
-			[Tooltip("Small distance that is subtracted from collision check to prevent collisions where the object touches the edge of the collider")]
-			[SerializeField] public float CollisionCheckOffset = 0.03f;
+			[Tooltip("Distance between ContactPoint and original collider for making IsTouching checks on this point")]
+			[SerializeField] public float CollisionCheckSize = 0.1f;
 		}
 
 		[Inject] protected MovementSettings settings;
@@ -155,15 +154,15 @@ namespace Platformer
 
 		// UNITY
 
-		private void Update()
-		{
-			UpdateGroundStatus();
-			UpdateCollisionChecks();
+		private void Update() =>
 			UpdateSpeed();
-		}
 
-		private void FixedUpdate() =>
+		private void FixedUpdate()
+		{
+			UpdateCollisionChecks();
+			UpdateFallStatus();
 			ApplySpeed(Time.fixedDeltaTime);
+		}
 
 		// PUBLIC
 
@@ -206,9 +205,9 @@ namespace Platformer
 		}
 
 		/// <summary>
-		/// Update status for <see cref="IsGrounded"/> and <see cref="IsFalling"/>
+		/// Update status for <see cref="IsFalling"/>
 		/// </summary>
-		private void UpdateGroundStatus()
+		private void UpdateFallStatus()
 		{
 			var NewFallStatus = false;
 			if (IsGrounded) // If grounded, update LastGroundTime
@@ -218,41 +217,92 @@ namespace Platformer
 			IsFalling = NewFallStatus;
 		}
 
+
+		/// <summary>
+		/// Specify what are we touching(Wall, ground, etc...)
+		/// </summary>
+		private enum TouchingDirection
+		{
+			None,
+			LeftWall,
+			RightWall,
+			Ceil,
+			Floor
+		}
+
 		/// <summary>
 		/// Update variables for collision check between character and obstacles
 		/// </summary>
 		private void UpdateCollisionChecks()
 		{
-			IsGrounded = Physics2D.OverlapBox( // Create box under gameobject to check ground
-						new(transform.position.x + collider.offset.x,
-							transform.position.y + collider.offset.y
-							- collider.size.y / 2/*Make it at bottom of gameobject*/
-							- settings.CollisionCheckThickness / 2
-							- settings.CollisionCheckOffset),
-						new(collider.size.x - settings.CollisionCheckOffset, settings.CollisionCheckThickness),
-						0,
-						settings.CollisionLayer
-					);
-			IsTouchRightWall = Physics2D.OverlapBox( // Create box on right of gameobject to check wall
-					new(transform.position.x + collider.offset.x
-						+ collider.size.x / 2/*Make it at right side of gameobject*/
-						+ settings.CollisionCheckThickness / 2
-						+ settings.CollisionCheckOffset,
-						transform.position.y + collider.offset.y),
-					new(settings.CollisionCheckThickness, collider.size.y - settings.CollisionCheckOffset),
-					0,
-					settings.CollisionLayer
-				);
-			IsTouchLeftWall = Physics2D.OverlapBox( // Create box on ledt side of gameobject to check wall
-						new(transform.position.x + collider.offset.x
-							- collider.size.x / 2/*Make it at left side of gameobject*/
-							- settings.CollisionCheckThickness / 2
-							- settings.CollisionCheckOffset,
-							transform.position.y + collider.offset.y),
-						new(settings.CollisionCheckThickness, collider.size.y - settings.CollisionCheckOffset),
-						0,
-						settings.CollisionLayer
-					);
+			// Gets what TouchingDirection is point touching in our GameObject
+			TouchingDirection GetPointTouching(in ContactPoint2D point)
+			{
+				TouchingDirection result = TouchingDirection.None;
+
+				// Check does point withing bottom box boundary
+				if (
+					point.point.y <= collider.bounds.min.y + settings.CollisionCheckSize &&
+					point.point.y >= collider.bounds.min.y - settings.CollisionCheckSize &&
+					point.point.x <= collider.bounds.max.x && 
+					point.point.x >= collider.bounds.min.x
+					)
+					result = TouchingDirection.Floor;
+				// Check does point withing top box boundary
+				else if (
+						point.point.y <= collider.bounds.max.y + settings.CollisionCheckSize &&
+						point.point.y >= collider.bounds.max.y - settings.CollisionCheckSize &&
+						point.point.x <= collider.bounds.max.x &&
+						point.point.x >= collider.bounds.min.x
+						)
+					result = TouchingDirection.Ceil;
+				// Check does point withing right box boundary
+				else if (
+						point.point.x <= collider.bounds.max.x + settings.CollisionCheckSize &&
+						point.point.x >= collider.bounds.max.x - settings.CollisionCheckSize &&
+						point.point.y <= collider.bounds.max.y &&
+						point.point.y >= collider.bounds.min.y
+						)
+					result = TouchingDirection.RightWall;
+				// Check does point withing left box boundary
+				else if (
+						point.point.x <= collider.bounds.min.x + settings.CollisionCheckSize &&
+						point.point.x >= collider.bounds.min.x - settings.CollisionCheckSize &&
+						point.point.y <= collider.bounds.max.y &&
+						point.point.y >= collider.bounds.min.y
+						)
+					result = TouchingDirection.LeftWall;
+
+				return result;
+			}
+
+			// Reset colliding variables
+			IsTouchLeftWall = false;
+			IsTouchRightWall = false;
+			IsGrounded = false;
+
+			// Retrieve all contact points
+			var filter = new ContactFilter2D();
+			filter.SetLayerMask(settings.CollisionLayer);
+			List<ContactPoint2D> contacts = new();
+			rigidbody.GetContacts(filter, contacts);
+
+			// Check all contacts
+			foreach (var point in contacts)
+			{
+				switch (GetPointTouching(point))
+				{
+					case TouchingDirection.LeftWall:
+						IsTouchLeftWall = true;
+						break;
+					case TouchingDirection.RightWall:
+						IsTouchRightWall = true;
+						break;
+					case TouchingDirection.Floor:
+						IsGrounded = true;
+						break;
+				}
+			}
 		}
 
 		/// <summary>

@@ -14,12 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSettings:
     MoveSpeed: 5
-    RunSpeed: 10
-    JumpForce: 10
-    Acceleration: 10
-    CoyoteTime: 0.2
+    RunSpeed: 7.5
+    JumpForce: 8
+    Acceleration: 50
+    CoyoteTime: 0.1
     CollisionLayer:
       serializedVersion: 2
       m_Bits: 1024
-    CollisionCheckThickness: 0.1
-    CollisionCheckOffset: 0.03
+    CollisionCheckSize: 0.2
