@@ -37,8 +37,8 @@ namespace Platformer
 
 		public void ShowDeathUI(int Score)
         {
-			var finishRoot = finish.rootVisualElement.Q<VisualElement>("RootContainer");
-			finishRoot.Q<Label>("Score").text = Convert.ToString(Score);
+			var deathRoot = death.rootVisualElement.Q<VisualElement>("RootContainer");
+			deathRoot.Q<Label>("Score").text = Convert.ToString(Score);
 			SetPanelShowState(death, true);
         }
 
