@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 3
   MaxHealth: 3
-  ImmortalTime: 1
+  ImmortalTime: 0.25
   KnockbackPower: 15
