@@ -2553,15 +2553,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983228334}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 8e9b58c7e269b7b4ebea9c55e33641a7, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 0}
-  m_SortingOrder: 0
+  sourceAsset: {fileID: 9197481963319205126, guid: 59547d1f10210c044a0a63e15ee25f54, type: 3}
+  m_SortingOrder: 2
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080

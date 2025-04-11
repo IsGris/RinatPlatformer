@@ -13,12 +13,19 @@ namespace Platformer
 		/// 1st parameter - normalized Vector in which direction need to apply knockback
 		/// </summary>
 		public event Action<Vector2> OnKnockBackRequired;
+		public event Action OnDeathUIRequired;
 
 		// INTERNAL VARIABLES
 
 		[Inject(Id = "CharacterTransform")] private readonly Transform playerTransform;
 
 		// PROTECTED
+
+		protected override void HandleDeath()
+		{
+			base.HandleDeath();
+			OnDeathUIRequired?.Invoke();
+		}
 
 		protected override void HandleTakeDamage(int Damage, int NewHealth, GameObject Attacker)
 		{

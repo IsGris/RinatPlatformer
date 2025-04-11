@@ -18,6 +18,7 @@ namespace Platformer
 		private void Start()
 		{
             InitializeFinishPanel();
+            InitializeDeathPanel();
 		}
 
 		// FINISH
@@ -34,10 +35,17 @@ namespace Platformer
 
         // DEATH
 
-		public void ShowDeathUI() =>
+		public void ShowDeathUI(int Score)
+        {
+			var finishRoot = finish.rootVisualElement.Q<VisualElement>("RootContainer");
+			finishRoot.Q<Label>("Score").text = Convert.ToString(Score);
 			SetPanelShowState(death, true);
+        }
 
-        // PRIVATE
+		private void InitializeDeathPanel() =>
+			death.rootVisualElement.Q<Button>("MainMenu").clicked += sceneManager.LoadMainMenu;
+
+		// PRIVATE
 
 		/// <summary>
 		/// Set panel show state

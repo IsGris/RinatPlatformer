@@ -10,6 +10,8 @@ namespace Platformer
 
         [Inject] protected MovementModel movementModel;
         [Inject] protected HealthConfig settings;
+		[Inject] private GameUI ui;
+		[Inject] private LevelData levelData;
 
 		// PROTECTED
 
@@ -25,7 +27,8 @@ namespace Platformer
             }
 
             playerViewModel.OnKnockBackRequired += ApplyKnockback;
-        }
+			playerViewModel.OnDeathUIRequired += ShowDeathUI;
+		}
 
 		protected override void UnsubscribeFromEvents()
         {
@@ -39,9 +42,13 @@ namespace Platformer
 			}
 
 			playerViewModel.OnKnockBackRequired -= ApplyKnockback;
+			playerViewModel.OnDeathUIRequired -= ShowDeathUI;
 		}
 
 		// PRIVATE
+
+        private void ShowDeathUI() =>
+            ui.ShowDeathUI(levelData.FruitsCollected);
 
 		private void ApplyKnockback(Vector2 direction) =>
             movementModel.ApplyForce(direction, settings.KnockbackPower);
