@@ -3,20 +3,18 @@ Button {
     border-right-width: 8px;
     border-bottom-width: 8px;
     border-left-width: 3px;
-    background-color: rgb(142, 0, 0);
-    color: rgb(255, 0, 0);
 }
 
 Button:hover {
-    border-top-width: 6px;
-    border-right-width: 5px;
-    border-bottom-width: 5px;
-    border-left-width: 6px;
+    border-top-width: 3px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    translate: 3px 4px;
 }
 
 Button:active {
-    color: rgb(204, 0, 0);
-    background-color: rgb(92, 0, 0);
+    translate: 6px 8px;
 }
 
 #RootContainer {

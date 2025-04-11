@@ -6,15 +6,15 @@ Button {
 }
 
 Button:hover {
-    border-top-width: 6px;
-    border-right-width: 5px;
-    border-bottom-width: 5px;
-    border-left-width: 6px;
+    border-top-width: 3px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    translate: 3px 4px;
 }
 
 Button:active {
-    color: rgb(202, 205, 0);
-    background-color: rgb(189, 163, 0);
+    translate: 6px 8px;
 }
 
 #RootContainer {

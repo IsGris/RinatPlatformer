@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UnityStyleSystem/MainMenu/MainMenuSS.uss?fileID=7433441132597879392&amp;guid=57e5be53c4c25ea4e852802443707ed1&amp;type=3#MainMenuSS" />
+    <engine:VisualElement name="RootContainer" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/Background/StartScreen.png?fileID=2800000&amp;guid=127145b710ab8f249a4a55babd0b7b97&amp;type=3#StartScreen&quot;); justify-content: center; align-items: center;">
+        <engine:Button text="Play" name="Play" style="width: 500px; height: 121px;" />
+        <engine:Button text="Settings" name="Settings" style="width: 500px; height: 121px;" />
+    </engine:VisualElement>
+</engine:UXML>
