@@ -17,7 +17,8 @@ jobs:
         targetPlatform:		
           - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          - Linux # Build for Linux OS
+          - StandaloneLinux # Build for a Linux standalone
+          - StandaloneLinux64 # Build for a Linux 64-bit standalone
           - WebGL # Build for WebGL.
 
          # comment or uncomment your desired platforms
@@ -39,6 +40,23 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+      - name: Deploy WebGL build
+        if: ${{ matrix.targetPlatform == 'WebGL' }} # Run only for WebGL
+        run: |
+          # Create gh-pages branch if it doesn't exist
+          git config --global user.name "GitHub Actions"
+          git checkout -b gh-pages || git checkout gh-pages
+          
+          # Clear out old build (if exists)
+          rm -rf ./build/*
+          
+          # Copy the WebGL build into the directory that GitHub Pages uses
+          cp -r ./build/WebGL/* .
+
+          # Add, commit, and push to gh-pages branch
+          git add .
+          git commit -m "Deploy WebGL build"
+          git push origin gh-pages --force
       - uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
