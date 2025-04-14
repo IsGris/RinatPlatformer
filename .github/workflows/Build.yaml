@@ -15,9 +15,9 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:		
-          - StandaloneWindows # Build a Windows standalone.
-          - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          - StandaloneLinux64 # Build for a Linux 64-bit standalone
+          #- StandaloneWindows # Build a Windows standalone.
+          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
+          #- StandaloneLinux64 # Build for a Linux 64-bit standalone
           - WebGL # Build for WebGL.
 
          # comment or uncomment your desired platforms
@@ -39,24 +39,52 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-      - name: Deploy WebGL build
-        if: ${{ matrix.targetPlatform == 'WebGL' }} # Run only for WebGL
-        run: |
-          # Create gh-pages branch if it doesn't exist
-          git config --global user.name "GitHub Actions"
-          git checkout -b gh-pages || git checkout gh-pages
-          
-          # Clear out old build (if exists)
-          rm -rf ./build/*
-          
-          # Copy the WebGL build into the directory that GitHub Pages uses
-          cp -r ./build/WebGL/* .
-
-          # Add, commit, and push to gh-pages branch
-          git add .
-          git commit -m "Deploy WebGL build"
-          git push origin gh-pages --force
       - uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
+      
+      # Deployment
+      - name: Stash build result and reset local changes
+        run: |
+          echo "Applying initial configs"
+          sudo chown -R $USER:$USER ${{ vars.BUILD_PATH }}
+          git config --global user.name "GitHub Actions"
+          echo "Stash and reset"
+          git add ${{ vars.BUILD_PATH }}/${{ vars.TARGET_PLATFORM }}
+          git stash push ${{ vars.BUILD_PATH }}/${{ vars.TARGET_PLATFORM }}
+          git stash list
+          git reset --hard
+          sudo git clean -d -x -f
+      - name: Cleaning gh-pages branch
+        run: |
+          echo "Switch to ${{ vars.DEPLOYMENT_BRANCH }}"
+          git switch -f ${{ vars.DEPLOYMENT_BRANCH }}
+          git reset --hard
+          sudo git clean -d -x -f
+          rm -r *
+          git add *
+          git commit -m "cleaning branch"
+          git push
+      - name: Applying stashed files to ${{ vars.DEPLOYMENT_BRANCH }}
+        run: |
+          echo "Applying stash"
+          git stash apply stash@{0}
+      - name: Copying files to root directory
+        run: |
+          cd ${{ vars.BUILD_PATH }}/${{ vars.TARGET_PLATFORM }}/${{ vars.TARGET_PLATFORM }}
+          ls
+          cp -r * ../../../
+          cd ../../../
+          rm -r ${{ vars.BUILD_PATH }}
+          ls
+          pwd
+      - name: Pushing deployment to gh-pages branch
+        run: |
+          pwd
+          git status
+          git add *
+          git commit -m "Deployment"
+          git push
+          git reset --hard
+          sudo git clean -d -x -f
