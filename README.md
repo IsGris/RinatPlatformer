@@ -1,4 +1,5 @@
 # [itch.io page](https://isgris.itch.io/rinatplatformer)
+# [GitHub Pages WebGL Play](https://isgris.github.io/RinatPlatformer/)
 # RinatPlatformer
 Platformer for unity created only by me using modern design patterns (SOLID, MVVM, Strategy, Singleton, etc...)
 
