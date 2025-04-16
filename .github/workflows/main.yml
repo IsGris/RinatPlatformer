@@ -60,9 +60,9 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:		
-          #- StandaloneWindows # Build a Windows standalone.
-          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
-          #- StandaloneLinux64 # Build for a Linux 64-bit standalone
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build for a Linux 64-bit standalone
           - WebGL # Build for WebGL.
 
          # comment or uncomment your desired platforms
