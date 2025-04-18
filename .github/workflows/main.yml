@@ -8,8 +8,6 @@ on:
   pull_request:
     branches:
     - main
-  schedule: # cron will trigger this pipeline everyday at 9.00 AM and 19.00 PM UTC
-  - cron: '00 9,19 * * *' 
   
   
 jobs:
